@@ -2,7 +2,7 @@ import json
 import os
 from contextlib import asynccontextmanager
 from pathlib import Path
-
+from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -16,6 +16,16 @@ from pypdf import PdfReader
 # ==========================================
 
 load_dotenv()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+        "https://YOUR-FRONTEND.onrender.com",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 api_key = os.getenv("GROQ_API_KEY")
 
