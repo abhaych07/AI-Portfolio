@@ -2,7 +2,7 @@ import json
 import os
 from contextlib import asynccontextmanager
 from pathlib import Path
-from fastapi.middleware.cors import CORSMiddleware
+
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -16,22 +16,11 @@ from pypdf import PdfReader
 # ==========================================
 
 load_dotenv()
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "https://ai-portfolio-1-vgm2.onrender.com",
-    ],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 api_key = os.getenv("GROQ_API_KEY")
 
 if not api_key:
-    raise ValueError("GROQ_API_KEY is missing from .env")
-
+    raise ValueError("GROQ_API_KEY is missing")
 
 client = Groq(api_key=api_key)
 
@@ -232,7 +221,12 @@ app.add_middleware(
     CORSMiddleware,
 
     allow_origins=[
+        # Local development
         "http://localhost:5173",
+        "http://127.0.0.1:5173",
+
+        # Deployed frontend
+        "https://ai-portfolio-1-vgm2.onrender.com",
     ],
 
     allow_credentials=True,
